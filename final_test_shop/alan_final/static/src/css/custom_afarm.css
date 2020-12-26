@@ -1,0 +1,48 @@
+@media (max-width: 768px) {
+    .devvn_order_main {
+        width: 100% !important;
+    }
+    .devvn_order_sidebar {
+    	display: none;
+    }
+
+    /* Nav Order Mobile */
+
+    .dev_order_mobile {
+    	display: block;
+		background: #29a253;
+		color: #fff;
+	    position: fixed;
+	    bottom: 0px;
+	    width: 100%;
+	    z-index: 100;
+    }
+
+    .dev-navbar {
+    	display: flex;
+    	position: relative;
+    	z-index: 980;
+    }
+
+    .dev_order_mobile .col-4 {
+    	cursor: pointer;
+    	text-decoration: none;
+	    text-transform: uppercase;
+	    height: 40px;
+	    line-height: 40px;
+    	box-sizing: border-box;
+	    font-size: 0.875rem;
+    }
+
+    .dev_order_mobile .price {
+    	text-align: right;
+    }
+
+    .dev_order_mobile .title {
+    	text-align: center;
+    }
+
+    .home-logo {
+    	height: 70px !important
+    }
+}

@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+   <template id="address_custom" name="Address Management" inherit_id="website_sale.address">
+      <xpath expr="//div[@id='wrap']" position="replace">
+         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBwi5iAgiVEg4tHKrT2LLstQecdEJxdeXY&#38;libraries=places"></script>
+         <div class="oe_website_sale address_custom" style="background: white; margin-top: 50px;">
+            <div class="oe_cart col-md-12">
+               <div class="container-fluid">
+                   <div class="row content">
+                       <div class="col-sm-5 sidenav">
+<!--                          <t t-call="website_sale.cart_summary"/>-->
+                           <t t-call="scita_final.cart_lines_custom_123" />
+                       </div>
+                        <t t-if="error" t-foreach="error.get('error_message', [])" t-as="err">
+                           <h4 class="text-danger" t-esc="err" />
+                        </t>
+                       <div class="col-sm-7 padding-auto">
+                           <h3 class="info_order">Thông Tin Giao Hàng</h3>
+                           <t t-if="mode == ('new', 'billing')">
+                              <p>Bạn đã có tài khoản chưa ? <a href="/web/login?redirect=/shop/checkout">Đăng nhập</a></p>
+                           </t>
+                            <form name="/shop/checkout" method="post" class="checkout_autoformat">
+                              <div t-attf-class="form-group #{error.get('name') and 'o_has_error' or ''} div_name">
+                                 <input style="height: 50px;" class="form-control" placeholder="Họ và tên" type="text" id="name" name="name" t-att-value="'name' in checkout and checkout['name']" />
+                              </div>
+                              <div t-attf-class="form-group #{error.get('email') and 'o_has_error' or ''}" id="div_email">
+                                 <input class="form-control" style="width:60%;height: 50px;display: inline !important;" placeholder="Email" type="email" id="email" name="email" t-att-value="'email' in checkout and checkout['email']" />
+                                  <input class="form-control" style="width:39%; float:right;height: 50px;" type="text" id="phone" name="phone" placeholder="Số diện thoại" t-att-value="'phone' in checkout and checkout['phone']"/>
+                              </div>
+                              <div class="map" id="map" style="width: 100%; height: 300px;"></div>
+                              <div t-attf-class="form-group #{error.get('street') and 'o_has_error' or ''} div_street">
+                                 <input style="height: 50px;" class="form-control" placeholder="Địa chỉ" type="text" id="street" name="street" t-att-value="'street' in checkout and checkout['street']" />
+                              </div>
+                              <input id="searchInput" class="input-controls" type="hidden" placeholder="Vui lòng nhập địa chỉ"/>
+                           <div t-attf-class="form-group #{error.get('street2') and 'o_has_error' or ''} div_street2">
+                                <input type="text" name="street2" placeholder="Nhập địa chỉ hẻm cụ thể( nếu có )" t-attf-class="form-control #{error.get('street2') and 'is-invalid' or ''}" t-att-value="'street2' in checkout and checkout['street2']" />
+                            </div>
+                                <t t-set='zip_city' t-value='country and [x for x in country.get_address_fields() if x in ["zip", "city"]] or ["city", "zip"]'/>
+                                        <t t-if="'zip' in zip_city and zip_city.index('zip') &lt; zip_city.index('city')">
+                                            <div t-attf-class="form-group #{error.get('zip') and 'o_has_error' or ''} col-md-4 div_zip">
+                                                <label style="display: none;" class="col-form-label label-optional" for="zip">Zip Code</label>
+                                                <input style="display: none;" type="hiden" name="zip" t-attf-class="form-control #{error.get('zip') and 'is-invalid' or ''}" value="." />
+                                            </div>
+                                        </t>
+                                        <div t-attf-class="form-group #{error.get('city') and 'o_has_error' or ''} col-md-8 div_city">
+                                            <label style="display: none;" class="col-form-label" for="city">City</label>
+                                            <input style="display: none;" type="hiden" name="city" t-attf-class="form-control #{error.get('city') and 'is-invalid' or ''}" value="." />
+                                        </div>
+                                        <t t-if="'zip' in zip_city and zip_city.index('zip') &gt; zip_city.index('city')">
+                                            <div t-attf-class="form-group #{error.get('zip') and 'o_has_error' or ''} col-md-4 div_zip">
+                                                <label style="display: none;" class="col-form-label label-optional" for="zip">Zip Code</label>
+                                                <input style="display: none;" type="hiden" name="zip" t-attf-class="form-control #{error.get('zip') and 'is-invalid' or ''}" value="." />
+                                            </div>
+                                        </t>
+                             <div class="row">
+                                 <input name="utf8" type="hidden" value="✓"/>
+                                 <input name="selected_customer_shipping_province" type="hidden" value=""/>
+                                 <input name="selected_customer_shipping_district" type="hidden" value=""/>
+                                 <input name="selected_customer_shipping_ward" type="hidden" value=""/>
+                                 <div t-attf-class="col-md-6 col-12 form-group #{error.get('country_id') and 'o_has_error' or ''} div_country">
+                                    <select style="height: 45px;border-radius: 5px;" class="form-control country_id" name="country_id" id="country_id">
+                                      <option selected="selected"> Chọn Quốc gia</option>
+                                      <t t-foreach="countries" t-as="c">
+                                          <option data-code="HC" t-att-value="c.id" t-att-selected="c.id == (country and country.id or -1)" >
+                                             <t t-esc="c.name" />
+                                          </option>
+                                       </t>
+                                    </select>
+                                 </div>
+                                 <div name="state_id" class="" t-attf-class="state_test col-md-6 col-12 form-group #{error.get('state_id') and 'o_has_error' or ''}" t-att-style="(not country or not country.state_ids)">
+                                    <select style="height: 45px;border-radius: 5px;" class="form-control state_id" name="state_id" id="state_id" data-init="1">
+                                      <option selected="selected">  Chọn tỉnh / thành </option>
+                                       <t t-foreach="country and country.state_ids or []" t-as="s">
+                                          <option t-att-value="s.id" t-att-selected="s.id == ('state_id' in checkout and country and checkout['state_id'] != '' and int(checkout['state_id']))">
+                                             <t t-esc="s.name" />
+                                          </option>
+                                       </t>
+                                    </select>
+                                 </div>
+                             </div>
+                                <t t-if="mode == ('new', 'billing') and not only_services">
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-12">
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" id='shipping_use_same' class="mr8" name='use_same' value="1" checked='checked'/>Vận chuyển đến cùng một địa chỉ
+                                                    <span class='ship_to_other text-muted' style="display: none">&amp;nbsp;(<i>Địa chỉ giao hàng của bạn sẽ được yêu cầu sau) </i></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                             <div class="row">
+                                 <div class="col-md-6 col-xs-12 text-center"><button type="button" class="btn btn-success w-100">
+                                    <a style="color: white;" href="/shop" class="a-cart">
+                                        <span class="fa fa-long-arrow-left" />
+                                       <span>Quay lại giỏ hàng</span>
+                                    </a>
+                                 </button></div>
+                                 <div class="col-md-6 col-xs-12 text-center payment_top"><button type="button" class="btn btn-success w-100 button_payment">
+                                    <a style="color: white;" href="/shop/confirm_order" class="a-submit">
+                                       <span>Tiếp tục đến phương thức thanh toán</span>
+                                       <span class="fa fa-long-arrow-right" />
+                                    </a>
+                                 </button></div>
+                             </div>
+                              <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
+                              <input type="hidden" name="submitted" value="1" />
+                              <input type="hidden" name="partner_id" t-att-value="partner_id or '0'" />
+                              <input type="hidden" name="callback" t-att-value="callback" />
+                              <input type="hidden" name="field_required" t-att-value="'phone,name'" />
+                           </form>
+                       </div>
+                   </div>
+               </div>
+            </div>
+         </div>
+          <style type="text/css">
+                .input-controls {
+                  margin-top: 10px;
+                  border: 1px solid transparent;
+                  border-radius: 2px 0 0 2px;
+                  box-sizing: border-box;
+                  -moz-box-sizing: border-box;
+                  height: 32px;
+                  outline: none;
+                  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+                }
+                #searchInput {
+                  background-color: #fff;
+                  font-family: Roboto;
+                  font-size: 15px;
+                  font-weight: 300;
+                  margin-left: 12px;
+                  padding: 0 11px 0 13px;
+                  text-overflow: ellipsis;
+                  width: 50%;
+                }
+                #searchInput:focus {
+                  border-color: #4d90fe;
+                }
+            </style>
+            <script>
+            /* script */
+            function initialize() {
+               var latlng = new google.maps.LatLng(10.823099, 106.629662);
+                var map = new google.maps.Map(document.getElementById('map'), {
+                  center: latlng,
+                  zoom: 13
+                });
+                var marker = new google.maps.Marker({
+                  map: map,
+                  position: latlng,
+                  draggable: true,
+                  anchorPoint: new google.maps.Point(0, -29)
+               });
+                var input = document.getElementById('street');
+                var geocoder = new google.maps.Geocoder();
+                var autocomplete = new google.maps.places.Autocomplete(input);
+                autocomplete.bindTo('bounds', map);
+                var infowindow = new google.maps.InfoWindow();
+                autocomplete.addListener('place_changed', function() {
+                    infowindow.close();
+                    marker.setVisible(false);
+                    var place = autocomplete.getPlace();
+                    if (!place.geometry) {
+                        window.alert("Autocomplete's returned place contains no geometry");
+                        return;
+                    }
+
+                    // If the place has a geometry, then present it on a map.
+                    if (place.geometry.viewport) {
+                        map.fitBounds(place.geometry.viewport);
+                    } else {
+                        map.setCenter(place.geometry.location);
+                        map.setZoom(17);
+                    }
+
+                    marker.setPosition(place.geometry.location);
+                    marker.setVisible(true);
+
+                    bindDataToForm(place.formatted_address,place.geometry.location.lat(),place.geometry.location.lng());
+                    infowindow.setContent(place.formatted_address);
+                    infowindow.open(map, marker);
+
+                });
+                // this function will work on marker move event into map
+                google.maps.event.addListener(marker, 'dragend', function() {
+                    geocoder.geocode({'latLng': marker.getPosition()}, function(results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                      if (results[0]) {
+                          bindDataToForm(results[0].formatted_address,marker.getPosition().lat(),marker.getPosition().lng());
+                          infowindow.setContent(results[0].formatted_address);
+                          infowindow.open(map, marker);
+                      }
+                    }
+                    });
+                });
+            }
+
+            function bindDataToForm(address,lat,lng){
+               let arrayAddress = address.split(',');
+               if(typeof arrayAddress[3] === 'undefined') {
+                  window.alert("Autocomplete's returned place contains no geometry");
+                  return;
+               }
+            }
+
+
+            google.maps.event.addDomListener(window, 'load', initialize);
+            </script>
+      </xpath>
+   </template>
+   <!--shop cart custom-->
+    <template id="cart_lines_custom_123" name="Shopping Cart Lines custom">
+        <div class="card">
+            <div class="card-body p-xl-0" style="padding: 0 !important;">
+                <div class="toggle_summary d-xl-none">
+                    <b>Your order: </b>
+                    <span class='fa fa-chevron-down fa-border float-right' role="img" aria-label="Details" title="Details"></span>
+                </div>
+                <div t-if="not website_sale_order or not website_sale_order.website_order_line" class="js_cart_lines alert alert-info">
+                  Your cart is empty!
+                </div>
+                <div class="toggle_summary_div d-none d-xl-block summary_custom">
+                    <table class="mb16 table table-striped table-sm js_cart_lines" id="cart_products" t-if="website_sale_order and website_sale_order.website_order_line">
+                        <thead>
+                            <tr>
+                                <th class="td-img">Product</th>
+                                <th></th>
+                                <th class="text-center td-qty">Quantity</th>
+                                <th class="text-center td-price">Price</th>
+                                <th class="text-center td-action"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="website_sale_order.website_order_line" t-as="line">
+                                <tr t-att-class="'optional_product info' if line.linked_line_id else None">
+                                    <td colspan="2" t-if="not line.product_id.product_tmpl_id" class='td-img'></td>
+                                    <td align="center" t-if="line.product_id.product_tmpl_id" class='td-img'>
+                                        <span t-field="line.product_id.image_128" t-options="{'widget': 'image', 'qweb_img_responsive': False, 'class': 'rounded o_image_64_max'}" />
+                                    </td>
+                                    <td t-if="line.product_id.product_tmpl_id" class='td-product_name'>
+                                        <div>
+                                            <t t-call="website_sale.cart_line_product_link">
+                                                <strong t-field="line.name_short" />
+                                            </t>
+                                        </div>
+                                        <t t-call="website_sale.cart_line_description_following_lines">
+                                            <t t-set="div_class" t-value="'d-none d-md-block'"/>
+                                        </t>
+                                    </td>
+                                    <td class="text-center td-qty">
+                                        <div class="css_quantity input-group mx-auto">
+                                            <div class="input-group-prepend">
+                                                <a t-attf-href="#" class="btn btn-link js_add_cart_json d-none d-md-inline-block" aria-label="Remove one" title="Remove one">
+                                                    <i class="fa fa-minus"></i>
+                                                </a>
+                                            </div>
+                                            <input type="text" class="js_quantity form-control quantity" t-att-data-line-id="line.id" t-att-data-product-id="line.product_id.id" t-att-value="int(line.product_uom_qty) == line.product_uom_qty and int(line.product_uom_qty) or line.product_uom_qty" />
+                                            <div class="input-group-append">
+                                                <a t-attf-href="#" class="btn btn-link float_left js_add_cart_json d-none d-md-inline-block" aria-label="Add one" title="Add one">
+                                                    <i class="fa fa-plus"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-center td-price" name="price">
+                                        <t t-set="combination" t-value="line.product_id.product_template_attribute_value_ids + line.product_no_variant_attribute_value_ids"/>
+                                        <t t-set="combination_info" t-value="line.product_id.product_tmpl_id._get_combination_info(combination)"/>
+
+            <!--                            <t t-set="list_price_converted" t-value="website.currency_id._convert(combination_info['list_price'], website_sale_order.currency_id, website_sale_order.company_id, date)"/>-->
+            <!--                            <t groups="account.group_show_line_subtotals_tax_excluded" t-if="(website_sale_order.pricelist_id.discount_policy == 'without_discount' and website_sale_order.currency_id.compare_amounts(list_price_converted, line.price_reduce_taxexcl) == 1) or website_sale_order.currency_id.compare_amounts(line.price_unit, line.price_reduce) == 1" name="order_line_discount">-->
+            <!--                                <del t-attf-class="#{'text-danger mr8'}" style="white-space: nowrap;" t-esc="list_price_converted" t-options="{'widget': 'monetary', 'display_currency': website_sale_order.currency_id}" />-->
+            <!--                            </t>-->
+                                        <span t-field="line.price_reduce_taxexcl" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'display_currency': website_sale_order.currency_id}" groups="account.group_show_line_subtotals_tax_excluded" />
+                                        <t groups="account.group_show_line_subtotals_tax_included" t-if="(website_sale_order.pricelist_id.discount_policy == 'without_discount' and website_sale_order.currency_id.compare_amounts(list_price_converted, line.price_reduce_taxinc) == 1) or website_sale_order.currency_id.compare_amounts(line.price_unit, line.price_reduce) == 1" name="order_line_discount">
+                                            <del t-attf-class="#{'text-danger mr8'}" style="white-space: nowrap;" t-esc="list_price_converted" t-options="{'widget': 'monetary', 'display_currency': website_sale_order.currency_id}" />
+                                        </t>
+                                        <span t-field="line.price_reduce_taxinc" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'display_currency': website_sale_order.currency_id}" groups="account.group_show_line_subtotals_tax_included" />
+                                    </td>
+                                    <td class="td-action">
+                                        <a href='#' aria-label="Remove from cart" title="Remove from cart" class='js_delete_product no-decoration'> <small><i class='fa fa-trash-o'></i></small></a>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="o_cart_summary">
+                    <t t-call="scita_final.short_cart_summary_custom"/>
+                </div>
+            </div>
+        </div>
+        <style>
+            @media (min-width: 767px){
+                .oe_website_sale .summary_custom {
+                    max-width: 100% !important;
+                }
+            }
+
+        </style>
+
+    </template>
+
+    <template id="short_cart_summary_custom" name="Short Cart right column" inherit_id="website_sale.short_cart_summary">
+        <xpath expr="//div[hasclass('js_cart_summary')]" position="replace">
+            <div class="js_cart_summary" t-if="website_sale_order and website_sale_order.website_order_line" >
+                <div class="card-body">
+                    <h4 class="d-none d-xl-block">Tổng đơn hàng</h4>
+                    <hr class="d-none d-xl-block"/>
+                    <div>
+                        <t t-call="website_sale.total">
+                            <t t-set='no_rowspan'>1</t>
+                        </t>
+                        <a style="display: none !important" role="button" t-if="website_sale_order and website_sale_order.website_order_line" class="btn btn-secondary float-right d-none d-xl-inline-block" href="/shop/checkout?express=1">
+                            <span>Process Checkout</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+    <template id="add_to_cart_custom" inherit_id="website_sale.product" active="False" customize_show="True" name="Add to cart custom">
+        <xpath expr="//a[@id='add_to_cart']" position="replace">
+            <a role="button" id="buy_now" class="btn btn-outline-primary btn-lg mt16 d-block d-sm-inline-block" href="#"><i class="fa fa-shopping-cart"/> Thêm giỏ hàng</a>
+        </xpath>
+    </template>
+
+</odoo>

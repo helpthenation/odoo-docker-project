@@ -1,0 +1,155 @@
+#description_reviews_tabs{
+    justify-content: center;
+    display: flex;
+}
+#product_detail .js_main_product .js_add_cart_variants .variant_attribute {
+    flex: 100% !important;
+    max-width: 100% !important;
+}
+
+#add_to_cart{
+    background: -webkit-linear-gradient(top,#FFB535,#FDA41D)!important;
+    font-size: 16px;
+    color: #fff;
+    text-align: center;
+    text-transform: uppercase;
+    border: 1px solid #fff!important;
+    border-radius: 0;
+    width: 200px;
+}
+#buy_now{
+    background: -webkit-linear-gradient(top,#FFB535,#FDA41D)!important;
+    font-size: 16px;
+    color: #fff;
+    text-align: center;
+    text-transform: uppercase;
+    border: 1px solid #fff!important;
+    border-radius: 0;
+    width: 100%;
+}
+.oe_price{
+    font-size: 22px;
+    color: #d0021b;
+    margin-top: 10px;
+    font-weight: 700;
+}
+#product_detail #product_details h1{
+    line-height: 1.3em;
+    color: #db532f;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+ @media screen and (max-device-width: 767px) {
+    .payment_top{
+        margin-top: 10px;
+    }
+ }
+.d-xl-inline-block {
+    display: inline-block !important;
+    background: #75C300!important;
+    color: white !important;
+}
+.pwp-img{
+    border: 1px solid #75C300!important;
+}
+.js_sale #theme_scita_products_grid_view .cs-product .sct-hover-info .btn:hover, .js_sale .related-products .cs-product .sct-hover-info .btn {
+    background: #75C300 !important;
+}
+.js_sale #theme_scita_products_grid_view .cs-product .sct-hover-info .btn:hover, .js_sale .related-products .cs-product .sct-hover-info .btn:hover {
+    background: black !important;
+}
+
+.js_sale #theme_scita_products_grid_view .cs-product .pwd-desc .pwpi-title a, .js_sale .related-products .cs-product .pwd-desc .pwpi-title a {
+    color: black !important;
+}
+
+.js_sale #theme_scita_products_grid_view .cs-product .pwd-desc .price, .js_sale .related-products .cs-product .pwd-desc .price {
+    color: #da1600;
+    font-weight: 700;
+}
+@media (max-width: 767px){
+    header .navbar-expand-md .menu_right {
+        top: 40px !important;
+    }
+}
+.category_chill{
+    display: block;
+    padding: 8px;
+    float: left;
+    font-size: 14px;
+    font-weight: bold!important;
+    color: #00a300;
+    border: 1px solid #00a300;
+    border-radius: 5px;
+    margin: 10px 5px 0 0;
+}
+.mr8{
+    color: #666 !important;
+}
+.title-cate-name{
+    color: #75C300!important;
+}
+.title-cate-name:before{
+    content: "";
+    display: block;
+    background: url(https://dogogiakho.com/images/arr-left.png) no-repeat;
+    width: 400px;
+    height: 20px;
+    float: left;
+    margin: 9px 6px 0 0;
+}
+.title-cate-name:after{
+    content: "";
+    display: block;
+    background: url(https://dogogiakho.com/images/arr-left.png) no-repeat;
+    width: 400px;
+    height: 20px;
+    float: right;
+    margin: -10px 0 0 6px;
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+.sct_product_snippet_1 .cs-product .pwd-desc .price, .sct_product_snippet_2 .cs-product .pwd-desc .price {
+    color: red !important;
+}
+.btm_seprator{
+    font-size: 26px !important;
+    color: #75C300 !important;
+    font-weight: 700;
+}
+.sct_cst_btn .o_default_snippet_text{
+    background: #75C300 !important;
+    color: white !important;
+}
+.sct_map_info li{
+    float: left;
+    width: 31.33%;
+    line-height: 24px;
+    margin: 0 1%;
+    text-align: center;
+    min-height: 140px;
+    margin-bottom: 10px;
+}
+.sct_map_info li h3 {
+    background: #75C300!important;
+    padding: 4px;
+    border-radius: 50px;
+    color: #fff;
+    margin-bottom: 10px;
+}
+@media screen and (max-width: 767px){
+    .sct_map_info li {
+        width: 98%;
+    }
+}
+.google_map_v2 .sct_map_info {
+    display: inline !important;
+}
+ul {
+    list-style-type: none;
+}
+
+

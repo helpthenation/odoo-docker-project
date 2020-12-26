@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <template id="assent_front" inherit_id="website.assets_frontend">
+    <xpath expr="." position="inside">
+      <link href="/scita_final/static/src/css/app.css" rel="stylesheet"/>
+        <script>
+          $(document).ready(function(){
+                $( ".address_custom .oe_cart" ).removeClass( "col-xl-8" );
+              })
+        </script>
+    </xpath>
+  </template>
+
+</odoo>

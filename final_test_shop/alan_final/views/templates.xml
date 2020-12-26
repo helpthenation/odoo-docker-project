@@ -1,0 +1,719 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="product_items_afarm">
+      <div class="oe_website_sale">
+         <div class="hidden" id="products_grid_before"></div>
+         <div id="products_grid">
+            <div class="dev_order_mobile">
+               <t t-set="website_sale_order" t-value="website.sale_get_order()" />
+               <nav class="dev-navbar-container dev_navbar">
+                  <div style="width: 100%; padding: 12px; margin-bottom: 18px;">
+                     <div style="width: 33%; float: left" class="quantity">
+                        <span class="quantity_monile" style="background: red; padding: 4px;" t-if="website_sale_order and website_sale_order.cart_quantity and website_sale_order.cart_quantity &gt; 0">
+                           <t t-esc="website_sale_order and website_sale_order.cart_quantity" />
+                        </span> món
+                     </div>
+                     <div  style="width: 33%; float: left" class="title">
+                        <a style="color: white !important" data-toggle="modal" data-target="#exampleModalCenter1">XEM GIỎ HÀNG</a>
+                        <div class="modal fade" id="exampleModalCenter1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                           <div class="modal-dialog modal-dialog-centered" role="document">
+                              <div class="modal-content modal-mobile">
+                                <t t-call="alan_final.cart_custom" />
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div  style="width: 33%; float: left" class="price">
+                        <span style="background: red; padding: 4px;" class="my_cart_quantity_total">
+                           <t t-esc="website_sale_order and website_sale_order.amount_total or 0" />
+                        </span>
+                     </div>
+                  </div>
+               </nav>
+            </div>
+            <div style="width:100%" id="content" role="main" class="content-area">
+               <div class="menu-order">
+                  <div class="devvn_order_wrap">
+                     <div class="menu_container">
+                        <div class="devvn_order_content devvn_clear">
+                           <div class="devvn_order_main devvn_clear devvn_tab_content">
+                              <div id="devvn_tab_menu_order" class="active devvn_tab_item">
+                                 <div class="devvn_menu_nav">
+                                    <div class="devvn_fix_scroll">
+                                       <h3 class="svn_font">Thực đơn</h3>
+                                       <ul class="anyClass">
+                                          <t t-foreach="categories" t-as="c">
+                                             <li class="devvn_cat_li">
+                                                <a class="devvn_cat_select" t-att-href="keep('#%s' % c.id)">
+                                                   <t t-esc="c.name" />
+                                                </a>
+                                             </li>
+                                          </t>
+                                       </ul>
+                                    </div>
+                                 </div>
+                                 <div class="devvn_menu_cont">
+                                    <div class="search_box_menuorder">
+                                       <div class="search_box_menuorder_count">
+                                          <span class="count_prod_menuorder">0</span>
+                                       </div>
+                                       <div class="input-group mb-3 search_box_menuorder_input" style="z-index: 0">
+                                             <input id ="search_menu_order" style="font-size: 14px; font-weight: 700; border-radius: 5px; width: 100%; height: 50px;" type="text" name="search" class="form-control" placeholder="Nhập sản phẩm cần tìm"/>
+                                       </div>
+                                    </div>
+                                    <t t-if="products">
+                                       <t t-foreach="categories" t-as="c">
+                                          <div class="devvn_section_category">
+                                             <div class="scroll_title" t-att-id="c.id">
+                                                <h2 class="devvn_term_title">
+                                                   <t t-esc="c.name"/>
+                                                </h2>
+                                             </div>
+                                             <div class="devvn_term_item">
+                                                <t t-foreach="products" t-as="product">
+                                                  
+                                                   <t t-if="product.categ_id">
+                                                      <t t-foreach="product.public_categ_ids" t-as="p">
+                                                        <t t-if="c.id == p.id">
+                                                         <div class="box-items">
+                                                            <div class="devvn_entry_main parents_item">
+                                                               <div class="devvn_prd_list_option" data-price-text="78.000" data-prdid="113" data-prdtitle="Combo 78k: Bò Kho tô lớn (nạm bò + gân bò) + Sâm lạnh + Khăn" data-prdthumb="https://order.bokhocomai.com/wp-content/uploads/2019/08/Combo-68k.jpg" data-prdprice="78000">
+                                                                  <div class="devvn_entry_thumb">
+                                                                     <a t-att-href="keep('/shop/product/%s' % slug(product), page=(None))" class="preview-image">
+                                                                        <img width="100" height="100" t-att-src="website.image_url(product,'image_128')" class="attachment-thumbnail size-thumbnail wp-post-image" alt="" />
+                                                                     </a>
+                                                                  </div>
+                                                                  <div class="devvn_entry_cont">
+                                                                     <div class="devvn_menuorder_title_price">
+                                                                        <h3>
+                                                                           <lable class="devvn_product_name"><a style="color: black;" t-att-href="keep('/shop/product/%s' % slug(product), page=(None))"><t t-esc="product.name"/></a></lable>
+                                                                           <span style="background-color:#ffc107">Món dùng nhiều nhất</span>
+                                                                        </h3>
+                                                                     </div>
+                                                                     <div class="desc_menuorder">
+                                                                        <p><t t-esc="product.description_sale"/></p>
+                                                                     </div>
+                                                                     <div class="devvn_menuorder_price">
+                                                                     <t t-set="combination_info" t-value="product._get_combination_info(only_template=True, add_qty=add_qty or 1, pricelist=pricelist)"/>
+                                                                        <span class="devvn_price">+
+                                                                            <b>
+                                                                              <t t-if="True">
+                                                                                  <del t-attf-class="text-danger mr8 {{'' if combination_info['has_discounted_price'] else 'd-none'}}" style="white-space: nowrap;" t-esc="combination_info['list_price']" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                                                                              </t>
+                                                                              <span t-if="combination_info['price']" t-esc="combination_info['price']" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                                                                              <span itemprop="price" style="display:none;" t-esc="combination_info['price']"/>
+                                                                              <span itemprop="priceCurrency" style="display:none;" t-esc="website.currency_id.name"/>
+                                                                          </b>
+                                                                        </span>
+                                                                        <a class="popup_detail" data-toggle="modal" data-target="#exampleModalCenter">
+                                                                           <span class="devvn_plus">+</span>
+                                                                        </a>
+                                                                        <a class="tch-text-bold uk-button uk-button-primary uk-width-1-1 uk-padding-remove-left uk-padding-remove-right" style="color: white !important; display: none;" data-toggle="modal" data-target="#myModal1">XEM GIỎ HÀNG</a>
+                                                                        <div class="modal fade" id="myModal1">
+                                                                           <div class="modal-dialog">
+                                                                              <div class="modal-content">
+                                                                                 -..dang load
+                                                                              </div>
+                                                                           </div>
+                                                                        </div>
+                                                                     </div>
+                                                                     <div class="hidden">
+                                                                        <span>Đã được đặt 
+                                                                           <b>5</b> lần
+                                                                        </span>
+                                                                     </div>
+                                                                  </div>
+                                                               </div>
+                                                            </div>
+                                                            <input class="product_id" type="hidden" t-att-value="product.id" />
+                                                         </div>
+                                                      </t>
+                                                   </t>
+                                                   </t>
+                                                
+                                                </t>
+                                             </div>
+                                          </div>            
+                                       </t>
+                                    </t>
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="devvn_order_sidebar">
+                              <div id="remove_cart_desktop" class="devvn_fix_scroll">
+                                 <div class="devvn_sidebar_main devvn_sidebar_main_load" id="devvn_sidebar_onload">
+                                    <t t-call="alan_final.cart_custom"/>
+                                 </div>
+                                 <div class="devvn_sidebar_ft no_checkout">
+                                    <t t-call="alan_final.total_delivery"/>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="devvn_option_list_option" style="display: none;">
+                     <div class="devvn_entry_item devvn_request">
+                        <h4>Mang đi
+                           <span>(Bắt buộc chọn 1 loại)</span>
+                        </h4>
+                        <div class="devvn_entry_list devvn_clear">
+                           <div class="devvn_item">
+                              <div class="devvn_left">
+                                 <div class="devvn_option_name">
+                                    <input type="checkbox" option_name="Mang đi" price="6000" option_id="11" title="Hộp, muỗng, đũa, bịch" class="devvn_check_valid devvn_checked"/>
+                                    <label class="devvn_binding">Hộp, muỗng, đũa, bịch</label>
+                                 </div>
+                              </div>
+                              <div class="devvn_right devvn_option_price">
+                                 +6.000 đ                                            
+                              </div>
+                              <div class="devvn_boxvalid" style="display: none;">
+                                 <span class="devvn_btn_minus devvn_ajax_btn_minus">-</span>
+                                 <input type="text" class="devvn_ajax_valid_input" readonly="readonly" value="1"/>
+                                 <span class="devvn_btn_plus devvn_ajax_btn_plus">+</span>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <script type="text/html" id="tmpl-menuorder-ship-time">
+                  <ul>
+                     <li>
+                        <label class="menuorder-icon-time">
+                           <input type="radio" name="ship_date" class="input_ship_date" value="now"/>
+                           <svg width="20" height="20" viewBox="0 0 20 20"
+                              xmlns="http://www.w3.org/2000/svg">
+                              <circle fill="none" stroke="#000" stroke-width="1.1" cx="10" cy="10" r="9"></circle>
+                              <rect x="9" y="4" width="1" height="7"></rect>
+                              <path fill="none" stroke="#000" stroke-width="1.1" d="M13.018,14.197 L9.445,10.625"></path>
+                           </svg>
+                           <span>Giao ngay</span>
+                        </label>
+                     </li>
+                     <li>
+                        <label class="menuorder-icon-date">
+                           <input type="radio" name="ship_date" class="input_ship_date" value="bydate"/>
+                           <svg width="20" height="20" viewBox="0 0 20 20"
+                              xmlns="http://www.w3.org/2000/svg">
+                              <path d="M 2,3 2,17 18,17 18,3 2,3 Z M 17,16 3,16 3,8 17,8 17,16 Z M 17,7 3,7 3,4 17,4 17,7 Z"></path>
+                              <rect width="1" height="3" x="6" y="2"></rect>
+                              <rect width="1" height="3" x="13" y="2"></rect>
+                           </svg>
+                           <span>Thời gian đặt hàng</span>
+                        </label>
+                        <div class="menuorder_time_select" data-times='{{{data.alltime}}}'>
+                           <div class="menuorder_time_select_item">
+                              <label for="shop_choosedate">Ngày đặt</label>
+                              <select id="shop_choosedate" name="shop_choosedate">
+                                      fsd
+                                  </select>
+                           </div>
+                           <div class="menuorder_time_select_item">
+                              <label for="shop_choosetime">Thời gian đặt</label>
+                              <select id="shop_choosetime" name="shop_choosetime">
+                                      ádas
+                                  </select>
+                           </div>
+                           <div class="menuorder_time_select_item">
+                              <button type="button" class="hengio">Hẹn giờ</button>
+                           </div>
+                        </div>
+                     </li>
+                  </ul>
+               </script>
+            </div>
+         </div>
+         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+               <div class="modal-content modal-product" style="border-radius: 0px !important;">
+                  <div class="modal-body">
+                     <div class="devvn_popup_header devvn_clear">
+                           <div class="devvn_thumb">
+                              <img class="devvn_prd_thumb" src=""/>
+                           </div>
+                           <div class="devvn_cont">
+                              <h3 class="devvn_prd_title" style="font-family: 'Sigmar One', cursive !important;color: #29a253;text-transform: uppercase;font-size: 17px !important;"></h3>
+                                 Giá:
+                              <span class="devvn_prd_price" style="display: inline-flex; margin-left: 10px;">
+                                 ..
+                              </span>
+                           </div>
+                        </div>
+                           <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
+                           <div class="js_product" >
+                              <div class="devvn_popup_content">
+                                 <div class="devvn_entry_item devvn_request">
+                                    <div class="devvn_entry_list devvn_clear">
+                                       <div class="devvn_item">
+                                          <div class="devvn_left">
+                                             <div class="devvn_option_name">
+                                                <span class="product_attribute"></span>
+                                                <ul class="list-unstyled" style="list-style-type: none;padding: 0;overflow: hidden; margin-left: -23px;">
+                                                   <li class="form-group js_attribute_value" style="margin: 0; padding: 5px;">
+                                                      <label class="control-label" style="margin: 0 20px;">
+                                                         <input type="radio" id="vehicle1" name="vehicle1" value="Bike"/>
+                                                            <label class="price" for="vehicle1"></label>
+                                                      </label>
+                                                   </li>
+                                                </ul>
+                                                
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="devvn_popup_footer devvn_clear">
+                                 <div class="devvn_left">
+                                    <div class="devvn_boxvalid css_quantity input-group oe_website_spinner" contenteditable="false">
+                                       <a style="background: #29a253 !important; border-radius: 100px" t-attf-href="#" class="mb8 input-group-addon js_add_cart_json">
+                                          <i class="fa fa-minus" />
+                                       </a>
+                                       <input type="text" class="form-control quantity" data-min="1" name="add_qty" value="1" />
+                                       <a style="background: #29a253 !important; border-radius: 100px" t-attf-href="#" class="mb8 input-group-addon float_left js_add_cart_json">
+                                          <i class="fa fa-plus" />
+                                       </a>
+                                    </div>
+                                 </div>
+                                 <div class="devvn_right parents_item button_add-cart">
+                                    <button  type="button" class="btn btn-success btn-cart-plus">
+                                       <div  uk-grid="" class="uk-grid-small uk-grid">
+                                             <a style="color: white; font-size: 15px;font-family: 'Quicksand', sans-serif; background: unset !important; border: none !important;" id="add_to_cart1" class="mt8 js_check_product a-submit" href="#">Thêm vào giỏ hàng+
+                                                <span style="color: white; margin-left: 5px" class="total_price_1">
+                                                </span>
+                                             </a>
+                                       </div>
+                                    </button>
+                                 </div>
+                              </div>
+                           </div>
+                           <input type="hidden" class="product_id" name="product_id" id="product_id" value=""/>
+                     </div>
+               </div>
+            </div>
+         </div>
+      </div>
+  </template>
+  <template id="modify_shop" inherit_id="website_sale.products" name="Products">
+      <xpath expr="//div[hasclass('products_pager')]" position="before" />
+      <xpath expr="//div[@id='wrap']//div[hasclass('oe_structure')]" position="before">
+         <div class="clearfix" />
+         <t t-call="alan_final.product_items_afarm" />
+      </xpath>
+      <xpath expr="//div[@id='products_grid']//table" position="replace">
+         <table />
+      </xpath>
+   </template>
+<!--   <template id="address_custom" name="Address Management" inherit_id="website_sale.address">-->
+<!--      <xpath expr="//div[@id='wrap']" position="replace">-->
+<!--         <link href="/alan_final/static/src/css/order.css" rel="stylesheet"/>-->
+<!--         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBwi5iAgiVEg4tHKrT2LLstQecdEJxdeXY&#38;libraries=places"></script>-->
+<!--         <div class="oe_website_sale" style="background: white;">-->
+<!--            <div class="oe_cart">-->
+<!--               <div class="container-fluid">-->
+<!--                   <div class="row content">-->
+<!--                       <div class="col-sm-5 sidenav">-->
+<!--                          <t t-call="website_sale.cart_summary"/>-->
+<!--                       </div>-->
+<!--                        <t t-if="error" t-foreach="error.get('error_message', [])" t-as="err">-->
+<!--                           <h4 class="text-danger" t-esc="err" />-->
+<!--                        </t>-->
+<!--                       <div class="col-sm-7 padding-auto">-->
+<!--                           <h3 class="info_order">Thông Tin Giao Hàng</h3>-->
+<!--                           <t t-if="mode == ('new', 'billing')">-->
+<!--                              <p>Bạn đã có tài khoản chưa ? <a href="/web/login?redirect=/shop/checkout">Đăng nhập</a></p>-->
+<!--                           </t>-->
+<!--                            <form name="/shop/checkout" method="post" class="checkout_autoformat">-->
+<!--                              <div t-attf-class="form-group #{error.get('name') and 'has-error' or ''} div_name">-->
+<!--                                 <input style="height: 50px;" class="form-control" placeholder="Họ và tên" type="text" id="name" name="name" t-att-value="'name' in checkout and checkout['name']" />-->
+<!--                              </div>-->
+<!--                              <div t-attf-class="form-group #{error.get('email') and 'has-error' or ''}" id="div_email">-->
+<!--                                 <input class="form-control" style="width:60%;height: 50px;" placeholder="Email" type="email" id="email" name="email" t-att-value="'email' in checkout and checkout['email']" />-->
+<!--                                  <input class="form-control" style="width:39%; float:right;height: 50px;" type="text" id="phone" name="phone" placeholder="Số diện thoại" t-att-value="'phone' in checkout and checkout['phone']"/>-->
+<!--                              </div>-->
+<!--                              <div class="map" id="map" style="width: 100%; height: 300px;"></div>-->
+<!--                              <div t-attf-class="form-group #{error.get('street') and 'has-error' or ''} div_street">-->
+<!--                                 <input style="height: 50px;" class="form-control" placeholder="Địa chỉ" type="text" id="street" name="street" t-att-value="'street' in checkout and checkout['street']" />-->
+<!--                              </div>-->
+<!--                              <input id="searchInput" class="input-controls" type="hidden" placeholder="Vui lòng nhập địa chỉ"/>-->
+<!--                           <div t-attf-class="form-group #{error.get('street2') and 'o_has_error' or ''} div_street2">-->
+<!--                                <input type="text" name="street2" placeholder="Nhập địa chỉ hẻm cụ thể( nếu có )" t-attf-class="form-control #{error.get('street2') and 'is-invalid' or ''}" t-att-value="'street2' in checkout and checkout['street2']" />-->
+<!--                            </div>-->
+<!--                             <div class="row">-->
+<!--                                 <input name="utf8" type="hidden" value="✓"/>-->
+<!--                                 <input name="selected_customer_shipping_province" type="hidden" value=""/>-->
+<!--                                 <input name="selected_customer_shipping_district" type="hidden" value=""/>-->
+<!--                                 <input name="selected_customer_shipping_ward" type="hidden" value=""/>-->
+<!--                                 <div t-attf-class="col-md-6 col-12 form-group #{error.get('country_id') and 'has-error' or ''} div_country">-->
+<!--                                    <select style="height: 45px;border-radius: 5px;" class="form-control country_id" name="country_id" id="country_id">-->
+<!--                                      <option selected="selected"> Chọn Quốc gia</option>-->
+<!--                                      <t t-foreach="countries" t-as="c">-->
+<!--                                          <option data-code="HC" t-att-value="c.id" t-att-selected="c.id == (country and country.id or -1)" >-->
+<!--                                             <t t-esc="c.name" />-->
+<!--                                          </option>-->
+<!--                                       </t>-->
+<!--                                    </select>-->
+<!--                                 </div>-->
+<!--                                 <div name="state_id" class="" t-attf-class="state_test col-md-6 col-12 form-group #{error.get('state_id') and 'has-error' or ''}" t-att-style="(not country or not country.state_ids)">-->
+<!--                                    <select style="height: 45px;border-radius: 5px;" class="form-control state_id" name="state_id" id="state_id" data-init="1">-->
+<!--                                      <option selected="selected">  Chọn tỉnh / thành </option>-->
+<!--                                       <t t-foreach="country and country.state_ids or []" t-as="s">-->
+<!--                                          <option t-att-value="s.id" t-att-selected="s.id == ('state_id' in checkout and country and checkout['state_id'] != '' and int(checkout['state_id']))">-->
+<!--                                             <t t-esc="s.name" />-->
+<!--                                          </option>-->
+<!--                                       </t>-->
+<!--                                    </select>-->
+<!--                                 </div>-->
+<!--                             </div>-->
+<!--                             <div class="row">-->
+<!--                                 <div class="col-md-6 col-xs-12 text-center"><a class="step-footer-previous-link" href="/shop">Giỏ hàng</a></div>-->
+<!--                                 <div class="col-md-6 col-xs-12 text-center"><button type="button" class="btn btn-primary w-100 button_payment">-->
+<!--                                    <a style="color: white;" href="/shop/confirm_order" class="a-submit">-->
+<!--                                       <span>Tiếp tục đến phương thức thanh toán</span>-->
+<!--                                       <span class="fa fa-long-arrow-right" />-->
+<!--                                    </a>-->
+<!--                                 </button></div>-->
+<!--                             </div>-->
+<!--                              <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />-->
+<!--                              <input type="hidden" name="submitted" value="1" />-->
+<!--                              <input type="hidden" name="partner_id" t-att-value="partner_id or '0'" />-->
+<!--                              <input type="hidden" name="callback" t-att-value="callback" />-->
+<!--                              <input type="hidden" name="field_required" t-att-value="'phone,name'" />-->
+<!--                           </form>-->
+<!--                       </div>-->
+<!--                   </div>-->
+<!--               </div> -->
+<!--            </div>-->
+<!--         </div>-->
+<!--          <style type="text/css">-->
+<!--                .input-controls {-->
+<!--                  margin-top: 10px;-->
+<!--                  border: 1px solid transparent;-->
+<!--                  border-radius: 2px 0 0 2px;-->
+<!--                  box-sizing: border-box;-->
+<!--                  -moz-box-sizing: border-box;-->
+<!--                  height: 32px;-->
+<!--                  outline: none;-->
+<!--                  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);-->
+<!--                }-->
+<!--                #searchInput {-->
+<!--                  background-color: #fff;-->
+<!--                  font-family: Roboto;-->
+<!--                  font-size: 15px;-->
+<!--                  font-weight: 300;-->
+<!--                  margin-left: 12px;-->
+<!--                  padding: 0 11px 0 13px;-->
+<!--                  text-overflow: ellipsis;-->
+<!--                  width: 50%;-->
+<!--                }-->
+<!--                #searchInput:focus {-->
+<!--                  border-color: #4d90fe;-->
+<!--                }-->
+<!--            </style>-->
+<!--            <script>-->
+<!--            /* script */-->
+<!--            function initialize() {-->
+<!--               var latlng = new google.maps.LatLng(28.5355161,77.39102649999995);-->
+<!--                var map = new google.maps.Map(document.getElementById('map'), {-->
+<!--                  center: latlng,-->
+<!--                  zoom: 13-->
+<!--                });-->
+<!--                var marker = new google.maps.Marker({-->
+<!--                  map: map,-->
+<!--                  position: latlng,-->
+<!--                  draggable: true,-->
+<!--                  anchorPoint: new google.maps.Point(0, -29)-->
+<!--               });-->
+<!--                var input = document.getElementById('street');-->
+<!--                var geocoder = new google.maps.Geocoder();-->
+<!--                var autocomplete = new google.maps.places.Autocomplete(input);-->
+<!--                autocomplete.bindTo('bounds', map);-->
+<!--                var infowindow = new google.maps.InfoWindow();   -->
+<!--                autocomplete.addListener('place_changed', function() {-->
+<!--                    infowindow.close();-->
+<!--                    marker.setVisible(false);-->
+<!--                    var place = autocomplete.getPlace();-->
+<!--                    if (!place.geometry) {-->
+<!--                        window.alert("Autocomplete's returned place contains no geometry");-->
+<!--                        return;-->
+<!--                    }-->
+<!--              -->
+<!--                    // If the place has a geometry, then present it on a map.-->
+<!--                    if (place.geometry.viewport) {-->
+<!--                        map.fitBounds(place.geometry.viewport);-->
+<!--                    } else {-->
+<!--                        map.setCenter(place.geometry.location);-->
+<!--                        map.setZoom(17);-->
+<!--                    }-->
+<!--                   -->
+<!--                    marker.setPosition(place.geometry.location);-->
+<!--                    marker.setVisible(true);          -->
+<!--                -->
+<!--                    bindDataToForm(place.formatted_address,place.geometry.location.lat(),place.geometry.location.lng());-->
+<!--                    infowindow.setContent(place.formatted_address);-->
+<!--                    infowindow.open(map, marker);-->
+<!--                   -->
+<!--                });-->
+<!--                // this function will work on marker move event into map -->
+<!--                google.maps.event.addListener(marker, 'dragend', function() {-->
+<!--                    geocoder.geocode({'latLng': marker.getPosition()}, function(results, status) {-->
+<!--                    if (status == google.maps.GeocoderStatus.OK) {-->
+<!--                      if (results[0]) {        -->
+<!--                          bindDataToForm(results[0].formatted_address,marker.getPosition().lat(),marker.getPosition().lng());-->
+<!--                          infowindow.setContent(results[0].formatted_address);-->
+<!--                          infowindow.open(map, marker);-->
+<!--                      }-->
+<!--                    }-->
+<!--                    });-->
+<!--                });-->
+<!--            }-->
+
+<!--            const formatAddress = arrayAddress => {-->
+<!--               if(typeof arrayAddress[4] === 'undefined') {-->
+<!--                  arrayAddress = setEmptyWard(arrayAddress);-->
+<!--               }-->
+
+<!--               arrayAddress.forEach((v, i) => {-->
+<!--                  arrayAddress[i] = v.replace('Q.', '').replace('P.', '').trim();-->
+<!--               });-->
+
+<!--               return arrayAddress;-->
+<!--            }-->
+
+<!--            const setEmptyWard = (address) => {-->
+<!--              address[4] = address[3];-->
+<!--              address[3] = address[2];-->
+<!--              address[2] = address[1];-->
+<!--              address[1] = '';-->
+
+<!--              return address;-->
+<!--            }-->
+
+<!--            function bindDataToForm(address,lat,lng){-->
+<!--               let arrayAddress = address.split(',');-->
+<!--               if(typeof arrayAddress[3] === 'undefined') {-->
+<!--                  window.alert("Autocomplete's returned place contains no geometry");-->
+<!--                  $('#street').val('');-->
+<!--                  return;-->
+<!--               }-->
+
+<!--               disabledButtonPayment();-->
+
+<!--               arrayAddress = formatAddress(arrayAddress);-->
+
+<!--               country = arrayAddress[arrayAddress.length-1].trim();-->
+<!--               city = arrayAddress[arrayAddress.length-2].trim();-->
+<!--               district = arrayAddress[arrayAddress.length-3].trim();-->
+<!--               ward = arrayAddress[arrayAddress.length-4].trim();-->
+<!--               console.log(arrayAddress);-->
+<!--               const id_country = getIdCountry(country);-->
+
+<!--               $('#country_id').val(id_country);-->
+
+<!--               $('#country_id').trigger('change');-->
+
+<!--               document.getElementById('searchInput').value = address;-->
+
+<!--               localStorage.setItem("address", address);-->
+<!--            }-->
+
+<!--            if(localStorage.getItem("address") !== null) {-->
+<!--               let address = localStorage.getItem("address");-->
+<!--               console.log(address);-->
+<!--               setTimeout(function(){-->
+<!--                  bindDataToForm(address, '', '');-->
+<!--               }, 1)-->
+<!--            }-->
+
+<!--            google.maps.event.addDomListener(window, 'load', initialize);-->
+<!--            </script>-->
+<!--      </xpath>-->
+<!--   </template>-->
+   <!--shop cart custom-->
+   <template id="cart_lines_custom_123" name="Shopping Cart Lines">
+<!--      <script type="text/javascript"  src="/alan_final/static/src/js/cart_custom_13.js"></script>-->
+      <div style="text-align: center;" class="well well-lg">
+         <image class="cart_o_mobile" src="https://banhangdakenh.asia/web/image/2687/carrt.png"/>
+         <div>
+            <span class="mobile">
+                Không có sản phẩm nào trong giỏ hàng của bạn.
+             </span>
+         </div>
+      </div>
+      <div class="total_0">
+         <t t-set="website_sale_order" t-value="website.sale_get_order()" />
+         <t t-foreach="website_sale_order.website_order_line" t-as="line">
+             <div class="devvn_sidebar_entry oe_website_sale cart_shop" data-id="1131100" t-att-data-product-cart="line.product_id.id">
+               <div id="cart_products" class="devvn_item cart_items">
+                  <div class="devvn_clear devvn_cart_item_left td-qty">
+                     <div class="devvn_cart_item_qty css_quantity input-group mx-auto shop_cart_quanty">
+                        <div class="replace_coupon">
+                           <a t-attf-href="#" class="js_add_cart_json_custom">
+                           <span class="devvn_plus_square devvn_square devvn_ajax_btn_plus">
+                           <i class="fa fa-minus change_data"></i>
+                           </span>
+                           </a>
+                           <input style="border-radius: 100px; width: 25px; height: 25px; min-width: 0px !important" type="text" class="js_quantity form-control quantity my_cart_quantity devvn_ajax_valid_input" t-att-data-line-id="line.id" t-att-data-product-id="line.product_id.id" t-att-value="int(line.product_uom_qty) == line.product_uom_qty and int(line.product_uom_qty) or line.product_uom_qty"/>
+                           <a t-attf-href="#" class="float_left js_add_cart_json_custom">
+                           <span class="devvn_plus_square devvn_square devvn_ajax_btn_plus">
+                           <i class="fa fa-plus"></i>
+                           </span>
+                           </a>
+                        </div>
+                     </div>
+                     <div class="devvn_cart_item_infor" style="padding-left: 10px;">
+                        <span class="devvn_sidebar_title">
+                            <span t-esc="line.product_id.with_context(display_default_code=False).display_name" class="h6 title_mobile" />
+                        </span>
+                        <div class="devvn_option">
+                           <span t-field="line.product_id.image_128" t-options="{'widget': 'image', 'class': 'image-card'}" />
+                        </div>
+                     </div>
+                  </div>
+                  <div class="cpptdev_sidebar_price devvn_clear oe_cart_123">
+                     <span class="title_mobile"><t t-esc="line.price_unit" /></span>
+                     <a style="white-space: unset !important;" t-attf-href="#" class="js_delete_product_shop no-decoration test_123"> <i class='fa fa-trash-o'></i></a>
+                  </div>
+               </div>
+            </div>
+
+
+
+         </t>
+      </div>
+      <div class="mobile_checkout">
+         <t t-call="alan_final.total_delivery"/>
+      </div>
+   </template>
+   <template id="cart_custom" name="Shopping Cart">
+      <t t-set="website_sale_order" t-value="website.sale_get_order()" />
+      <div class="row">
+         <div class="col-md-12 oe_cart coupon_mobile" style="margin-top: 0px !important; padding: 18px !important;">
+            <div class="row">
+               <div class="col-md-6">
+                  <h2 class="mb8 mt8 title-cart" style="font-family: 'Sigmar One', cursive;color: #29a253;text-transform: uppercase;font-size: 20px;">Giỏ Hàng</h2>
+               </div>
+               <div class="col-md-6" style="text-align: right">
+                  <a style="background: #29a253;" href="#" class="btn btn-primary mb32 mr8 remove_cart_shop">
+                     <span class="fa fa-trash-o" style="background: #29a253; padding: 9px; color: white"/>
+                     <span style="background: #29a253; padding: 7px; color: white" class="hidden-xs">Xóa hết</span>
+                  </a>
+               </div>
+            </div>
+            <div t-if="abandoned_proceed or access_token" class="mt8 mb8 alert alert-info">
+               <t t-if="abandoned_proceed">
+                  <p>Your previous cart has already been completed.</p>
+                  <p t-if="website_sale_order">Please proceed your current cart.</p>
+               </t>
+               <t t-if="access_token">
+                  <p>This is your current cart.</p>
+                  <p>
+                     <strong>
+                        <a t-attf-href="/shop/cartCustom/?access_token=#{access_token}&amp;revive=squash">Click here</a>
+                     </strong> if you want to restore your previous cart. Your current cart will be replaced with your previous cart.
+                  </p>
+                  <p>
+                     <strong>
+                        <a t-attf-href="/shop/cartCustom/?access_token=#{access_token}&amp;revive=merge">Click here</a>
+                     </strong> if you want to merge your previous cart into current cart.
+                       
+                  </p>
+               </t>
+            </div>
+            <t t-call="alan_final.cart_lines_custom_123" />
+         </div>
+      </div>
+   </template>
+   <template id="total_delivery">
+      <t t-set="website_sale_order" t-value="website.sale_get_order()" />
+      <div class="devvn_cart_total">
+         <span class="mobile">Cộng (
+            <span class="devvn_cart_total_qty mobile">
+               <span class="my_cart_quantity mobile" t-if="website_sale_order and website_sale_order.cart_quantity and website_sale_order.cart_quantity &gt; 0">
+                  <t t-esc="website_sale_order and website_sale_order.cart_quantity" />
+               </span>
+            </span> món)
+         </span>
+         <span class="devvn_price devvn_cart_total_price"></span>
+      </div>
+      <div class="devvn_cart_total devvn_cart_shipping">
+         <span class="mobile">Vận chuyển</span>
+         <span class="devvn_price devvn_cart_shipping_price mobile"></span>
+      </div>
+      <div class="devvn_cart_coupon">
+         <t t-if="coupon_not_available">
+            <t t-if="coupon_not_available=='1'">
+               <p class="bg-warning">This gift code is not available</p>
+            </t>
+            <t t-if="coupon_not_available=='2'">
+               <p class="bg-warning">This gift code is not available</p>
+            </t>
+            <t t-if="coupon_not_available=='3'">
+               <p class="bg-warning">The discount amount is too large</p>
+            </t>
+         </t>
+         <form action="/shop/gift_coupon" method="post" class="mb32">
+            <input type="hidden" name="csrf_token"
+                             t-att-value="request.csrf_token()" />
+            <div class="devvn_cart_coupon_input">
+               <input type="text"  name="promo_voucher" class="devvn_coupon_input" value="" placeholder="Nhập mã giảm giá" t-att-value="website_sale_order.pricelist_id.code or None" />
+               <button type="button" class="devvn_coupon_check a-submit">Áp dụng</button>
+            </div>
+            <div class="devvn_cart_coupon_mess"></div>
+            <div class="devvn_cart_coupon_result">
+               <span class="mobile">Giảm giá</span>
+               <span class="devvn_price devvn_cart_coupon_price mobile"></span>
+            </div>
+         </form>
+      </div>
+      <div class="devvn_cart_total devvn_cart_fulltotal">
+         <span class="mobile">Tổng cộng</span>
+         <span class="my_cart_quantity_total devvn_price devvn_cart_fulltotal_price">
+            <t t-esc="website_sale_order and website_sale_order.amount_total or 0" />
+         </span>
+      </div>
+      <div class="payment_now">
+         <a style="pointer-events: painted !important;" class="devvn_checkout" href="/shop/checkout">Thanh toán ngay</a>
+      </div>
+   </template>
+   <template id="custom_navbar_123" name="Custom Header 2" inherit_id="website.layout" active="False" customize_show="True">
+      <xpath expr="//header" position="replace">
+         <div id="content" role="main" class="content-area">
+               <div class="menu-order" style="margin-top: 100px">
+                  <div class="header">
+                     <div class="container">
+                        <div class="logo-order">
+                           <a href="/"><img class="home-logo" src="https://banhangdakenh.asia/web/image/3351/logo.png" width="100px"/></a>
+                        </div>
+                        <form autocomplete="off">
+                           <div class="menuorder_timeaddress">
+                              <div class="menuorder_address" style="top: 45px;">
+                                 <div class="menuorder_input">
+                                    <span class="menuorder_icon_location"></span>
+                                    <input type="text" class="form-control" id="address_shipping" placeholder="Nhập địa chỉ giao hàng"/>
+                                 </div>
+                              </div>
+                              <div class="dropdown menuorder_address">
+                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                 <t t-if="website.user_id != user_id">
+                                    <span t-esc="(len(user_id.name)&gt;25) and (user_id.name[:23]+'...') or user_id.name" />
+                                 </t>
+                                 <t t-if="not(website.user_id != user_id)">Account</t>
+                                <span class="caret"></span></button>
+                                <ul class="dropdown-menu">
+                                  <li><a href="/web/login" t-if="not(website.user_id != user_id)">Đăng nhập</a></li>
+                                  <li><a hhref="/web/signup" t-if="signup_enabled and not(website.user_id != user_id)">Đăng kí</a></li>
+                                  <li><a t-attf-href="/web/session/logout?redirect=/" t-if="website.user_id != user_id">Đăng xuất</a></li>
+                                </ul>
+                              </div>
+                           </div>
+                        </form>
+                     </div>
+                  </div>
+               </div>
+         </div>
+      </xpath>
+   </template>
+</odoo>

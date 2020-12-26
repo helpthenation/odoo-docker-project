@@ -1,0 +1,60 @@
+    .row .content{
+        height: 100%;
+    }
+    .sidenav {
+        background-color: #f1f1f1;
+        padding: 40px 5% 40px 10%;
+    }
+    .sidenav input, select {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    
+    @media screen and (max-width: 767px) {
+        .sidenav {
+            background-color: unset;
+            padding: 30px 5%;
+        }
+        .row.content {
+            height: auto;
+        } 
+        .padding-auto{
+            padding:0 5%;
+      }
+    }
+    @media screen and (min-width: 768px) {
+        .padding-auto{
+            padding: 40px 10% 40px 5%;
+        }
+    }
+    .padding-auto input, select {
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    .padding-auto .content-box select{
+        float: left;
+        width:32%;
+    }
+    input[type=submit] {
+      background-color: #4CAF50;
+      color: white;
+      padding: 14px 20px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+        height:46px
+    }
+    .image-card-123 {
+        background-color: #4CAF50 !important;
+    }

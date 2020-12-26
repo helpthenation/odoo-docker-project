@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="acquirer_form_vnpay" model="ir.ui.view">
+            <field name="name">acquirer.form.vnpay</field>
+            <field name="model">payment.acquirer</field>
+            <field name="inherit_id" ref="payment.acquirer_form"/>
+            <field name="arch" type="xml">
+                <xpath expr='//group[@name="acquirer"]' position='after'>
+                    <group attrs="{'invisible': [('provider', '!=', 'vnpay')]}">
+                        <field name="vnpay_website_code"/>
+                        <field name="vnpay_hash_secret" />
+                        <field name="vnpay_type"/>
+                    </group>
+                    <button name="toggle_environment_value"
+                            class="oe_stat_button"
+                            type="object" icon="fa-play">
+                        <div class="o_stat_info o_field_widget">
+                            <span class="text-success">Production</span>
+                            <span class="o_stat_text">Environment</span>
+                        </div>
+                    </button>
+                </xpath>
+            </field>
+        </record>
+
+      <!--   <record id="transaction_form_paypal" model="ir.ui.view">
+            <field name="name">acquirer.transaction.form.paypal</field>
+            <field name="model">payment.transaction</field>
+            <field name="inherit_id" ref="payment.transaction_form"/>
+            <field name="arch" type="xml">
+                <xpath expr='//notebook' position='inside'>
+                    <page string="Paypal TX Details">
+                        <group>
+                            <field name="paypal_txn_type"/>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record> -->
+
+    </data>
+</odoo>

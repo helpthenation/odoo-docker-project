@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="payment_acquirer_vnpay_domestic" model="payment.acquirer">
+            <field name="name">Thẻ ATM Nội địa</field>
+<!--            <field name="image" type="base64" file="payment_vnpay/static/src/img/icon.png"/>-->
+            <field name="provider">vnpay</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="view_template_id" ref="vnpay_acquirer_button"/>
+           <!--  <field name="environment">test</field> -->
+            <field name="pre_msg"><![CDATA[
+            <p></p>]]></field>
+            <field name="vnpay_website_code">TICTAG01</field>
+            <field name="vnpay_hash_secret">JXNMOMSAFRCPMLCWNXQRVCOZCARRMBBJ</field>
+            <field name="vnpay_type">DomesticBank</field>
+        </record>
+
+        <record id="payment_acquirer_vnpay_internation" model="payment.acquirer">
+            <field name="name">Thẻ Visa/Master</field>
+<!--            <field name="image" type="base64" file="payment_vnpay/static/src/img/icon.png"/>-->
+            <field name="provider">vnpay</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="view_template_id" ref="vnpay_acquirer_button"/>
+           <!--  <field name="environment">test</field> -->
+            <field name="pre_msg"><![CDATA[
+            <p></p>]]></field>
+            <field name="vnpay_website_code">TICTAG01</field>
+            <field name="vnpay_hash_secret">JXNMOMSAFRCPMLCWNXQRVCOZCARRMBBJ</field>
+            <field name="vnpay_type">InternationalCard</field>
+        </record>
+
+    </data>
+</odoo>

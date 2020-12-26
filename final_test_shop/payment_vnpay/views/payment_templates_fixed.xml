@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data noupdate="0">
+		<template id="vnpay_acquirer_button">
+			<div>
+                <input type="hidden" name="data_set" data-action-url="/payment/vnpay/render_pay" data-remove-me=""/>
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                <t t-if="return_url">
+                    <input type="hidden" name="return_url" t-att-value="return_url"/>
+                </t>
+                <input name="vnp_Version" t-att-value="vnp_Version" type="hidden" />
+                <input name="vnp_Command" t-att-value="vnp_Command" type="hidden" />
+                <input name="vnp_TmnCode" t-att-value="vnp_TmnCode" type="hidden" />
+                <input name="vnp_Amount" t-att-value="vnp_Amount" type="hidden" />
+                <input name="vnp_CreateDate" t-att-value="vnp_CreateDate" type="hidden" />
+                <input name="vnp_CurrCode" t-att-value="vnp_CurrCode" type="hidden" />
+                <input name="vnp_Locale" t-att-value="vnp_Locale" type="hidden" />
+                <input name="vnp_OrderInfo" t-att-value="vnp_OrderInfo" type="hidden" />
+                <input name="vnp_ReturnUrl" t-att-value="vnp_ReturnUrl" type="hidden" />
+                <input name="vnp_TxnRef" t-att-value="vnp_TxnRef" type="hidden" />
+                <input name="vnp_SecureHashType" t-att-value="vnp_SecureHashType" type="hidden" />
+                <input name="vnp_IpAddr" t-att-value="vnp_IpAddr" type="hidden" />
+                <input name="vnp_SecureHash" t-att-value="vnp_SecureHash" type="hidden" />
+                <input name="vnp_OrderType" t-att-value="vnp_OrderType" type="hidden" />
+            </div>
+		</template>
+
+		<template id="vnpay_international_card">
+			<t t-call="website.layout">
+				<div class="container" style="padding-top: 20px;">
+					<div class="panel panel-info">
+						<div class="panel-heading">
+							<h4>Thông tin hóa đơn:</h4>
+						</div>
+						<div class="panel-body" id="oderInfo">
+							<div>
+								<b>Mô tả :</b>
+								<t t-esc="show_des" />
+							</div>
+							<div>
+								<b>Số tiền:</b>
+								<t t-esc="show_amount" />
+								<t t-esc="vnp_CurrCode" />
+
+							</div>
+						</div>
+					</div>
+					<div class="panel panel-success">
+						<div class="panel-heading">
+							<h4>Loại thẻ thanh toán:</h4>
+						</div>
+
+						<div class="panel-body" id="payment">
+
+							<form action="/payment/vnpay/commit_pay" method="get" target="_self">
+								<input name="vnp_Version" t-att-value="vnp_Version" type="hidden" />
+								<input name="vnp_Command" t-att-value="vnp_Command" type="hidden" />
+								<input name="vnp_TmnCode" t-att-value="vnp_TmnCode" type="hidden" />
+								<input name="vnp_Amount" t-att-value="vnp_Amount" type="hidden" />
+								<input name="vnp_CreateDate" t-att-value="vnp_CreateDate" type="hidden" />
+								<input name="vnp_CurrCode" t-att-value="vnp_CurrCode" type="hidden" />
+								<input name="vnp_Locale" t-att-value="vnp_Locale" type="hidden" />
+								<input name="vnp_OrderInfo" t-att-value="vnp_OrderInfo" type="hidden" />
+								<input name="vnp_ReturnUrl" t-att-value="vnp_ReturnUrl" type="hidden" />
+								<input name="vnp_TxnRef" t-att-value="vnp_TxnRef" type="hidden" />
+								<input name="vnp_SecureHashType" t-att-value="vnp_SecureHashType" type="hidden" />
+								<input name="vnp_IpAddr" t-att-value="vnp_IpAddr" type="hidden" />
+								<input name="vnp_SecureHash" t-att-value="vnp_SecureHash" type="hidden" />
+								<input name="vnp_OrderType" t-att-value="vnp_OrderType" type="hidden" />
+								<div class="container">
+									<div class="row">
+										<div class="col-md-4 col-xs-12">
+											<button class="thumbnail" style="height: 90px; width: 100%;" type="submit" name="vnp_BankCode" value="VISA">
+												<img src="/payment_vnpay/static/src/img/international/visa_logo.png" alt="VISA" />
+											</button>
+										</div>
+
+										<div class="col-md-4 col-xs-12">
+											<button class="thumbnail" style="height: 90px; width: 100%;" type="submit" name="vnp_BankCode" value="VISA">
+												<img src="/payment_vnpay/static/src/img/international/mastercard_logo.png" alt="VISA" />
+											</button>
+										</div>
+
+										<div class="col-md-4 col-xs-12">
+											<button class="thumbnail" style="height: 90px; width: 100%;" type="submit" name="vnp_BankCode" value="VISA">
+												<img src="/payment_vnpay/static/src/img/international/jcb_logo.png" alt="VISA" />
+											</button>
+										</div>
+									</div>
+								</div>
+
+
+							</form>
+
+						</div>
+					</div>
+
+				</div>
+
+			</t>
+		</template>
+
+		<template id="vnpay_domesticbank">
+			<t t-call="website.layout">
+				<div class="container" style="padding-top: 20px;">
+					<div class="panel panel-info">
+						<div class="panel-heading">
+							<h4>Thông tin hóa đơn:</h4>
+						</div>
+						<div class="panel-body" id="oderInfo" align="left">
+							<div>
+								<b>Mô tả :</b>
+								<t t-esc="show_des" />
+							</div>
+							<div>
+								<b>Số tiền:</b>
+								<t t-esc="show_amount" />
+								<t t-esc="vnp_CurrCode" />
+
+							</div>
+						</div>
+					</div>
+					<div class="panel panel-success">
+						<div class="panel-heading">
+							<h4>Loại thẻ thanh toán:</h4>
+						</div>
+
+						<div class="panel-body" id="payment" align="middle">
+
+							<form action="/payment/vnpay/commit_pay" method="get" target="_self">
+								<input name="vnp_Version" t-att-value="vnp_Version" type="hidden" />
+								<input name="vnp_Command" t-att-value="vnp_Command" type="hidden" />
+								<input name="vnp_TmnCode" t-att-value="vnp_TmnCode" type="hidden" />
+								<input name="vnp_Amount" t-att-value="vnp_Amount" type="hidden" />
+								<input name="vnp_CreateDate" t-att-value="vnp_CreateDate" type="hidden" />
+								<input name="vnp_CurrCode" t-att-value="vnp_CurrCode" type="hidden" />
+								<input name="vnp_Locale" t-att-value="vnp_Locale" type="hidden" />
+								<input name="vnp_OrderInfo" t-att-value="vnp_OrderInfo" type="hidden" />
+								<input name="vnp_ReturnUrl" t-att-value="vnp_ReturnUrl" type="hidden" />
+								<input name="vnp_TxnRef" t-att-value="vnp_TxnRef" type="hidden" />
+								<input name="vnp_SecureHashType" t-att-value="vnp_SecureHashType" type="hidden" />
+								<input name="vnp_IpAddr" t-att-value="vnp_IpAddr" type="hidden" />
+								<input name="vnp_SecureHash" t-att-value="vnp_SecureHash" type="hidden" />
+								<input name="vnp_OrderType" t-att-value="vnp_OrderType" type="hidden" />
+
+								<div class="container">
+									<div class="row">
+										<div class="col-md-3 col-xs-12 col-sm-6 col-6" style="padding: 10px">
+											<button class="thumbnail" style="height: 90px; width: 100%;" type="submit" name="vnp_BankCode" value="VIETCOMBANK">
+												<img src="/payment_vnpay/static/src/img/domesticbank/vietcombank_logo.png" />
+											</button>
+										</div>
+										<div class="col-md-3 col-xs-12 col-sm-6 col-6" style="padding: 10px">
+											<button class="thumbnail" style="height: 90px; width: 100%;" type="submit" name="vnp_BankCode" value="VIETINBANK">
+												<img src="/payment_vnpay/static/src/img/domesticbank/vietinbank_logo.png" />
+											</button>
+										</div>
+										<div class="col-md-3 col-xs-12 col-sm-6 col-6" style="padding: 10px">
+											<button class="thumbnail" style="height: 90px; width: 100%;" type="submit" name="vnp_BankCode" value="BIDV">
+												<img src="/payment_vnpay/static/src/img/domesticbank/bidv_logo.png" />
+											</button>
+										</div>
+										<div class="col-md-3 col-xs-12 col-sm-6 col-6" style="padding: 10px">
+											<button class="thumbnail" style="height: 90px; width: 100%;" type="submit" name="vnp_BankCode" value="AGRIBANK">
+												<img src="/payment_vnpay/static/src/img/domesticbank/agribank_logo.png" />
+											</button>
+										</div>
+										<div class="col-md-3 col-xs-12 col-sm-6 col-6" style="padding: 10px">
+											<button class="thumbnail" style="height: 90px; width: 100%;" type="submit" name="vnp_BankCode" value="SACOMBANK">
+												<img src="/payment_vnpay/static/src/img/domesticbank/sacombank_logo.png" />
+											</button>
+										</div>
+										<div class="col-md-3 col-xs-12 col-sm-6 col-6" style="padding: 10px">
+											<button class="thumbnail" style="height: 90px; width: 100%;" type="submit" name="vnp_BankCode" value="TECHCOMBANK">
+												<img src="/payment_vnpay/static/src/img/domesticbank/techcombank_logo.png" />
+											</button>
+										</div>
+										<div class="col-md-3 col-xs-12 col-sm-6 col-6" style="padding: 10px">
+											<button class="thumbnail" style="height: 90px; width: 100%;" type="submit" name="vnp_BankCode" value="ACB">
+												<img src="/payment_vnpay/static/src/img/domesticbank/acb_logo.png" />
+											</button>
+										</div>
+										<div class="col-md-3 col-xs-12 col-sm-6 col-6" style="padding: 10px">
+											<button class="thumbnail" style="height: 90px; width: 100%;" type="submit" name="vnp_BankCode" value="VPBANK">
+												<img src="/payment_vnpay/static/src/img/domesticbank/vpbank_logo.png" />
+											</button>
+										</div>
+										<div class="col-md-3 col-xs-12 col-sm-6 col-6" style="padding: 10px">
+											<button class="thumbnail" style="height: 90px; width: 100%;" type="submit" name="vnp_BankCode" value="DONGABANK">
+												<img src="/payment_vnpay/static/src/img/domesticbank/dongabank_logo.png" />
+											</button>
+										</div>
+										<div class="col-md-3 col-xs-12 col-sm-6 col-6" style="padding: 10px">
+											<button class="thumbnail" style="height: 90px; width: 100%;" type="submit" name="vnp_BankCode" value="EXIMBANK">
+												<img src="/payment_vnpay/static/src/img/domesticbank/eximbank_logo.png" />
+											</button>
+										</div>
+										<div class="col-md-3 col-xs-12 col-sm-6 col-6" style="padding: 10px">
+											<button class="thumbnail" style="height: 90px; width: 100%;" type="submit" name="vnp_BankCode" value="TPBANK">
+												<img src="/payment_vnpay/static/src/img/domesticbank/tpbank_logo.png" />
+											</button>
+										</div>
+										<div class="col-md-3 col-xs-12 col-sm-6 col-6" style="padding: 10px">
+											<button class="thumbnail" style="height: 90px; width: 100%;" type="submit" name="vnp_BankCode" value="NCB">
+												<img src="/payment_vnpay/static/src/img/domesticbank/ncb_logo.png" />
+											</button>
+										</div>
+										<div class="col-md-3 col-xs-12 col-sm-6 col-6" style="padding: 10px">
+											<button class="thumbnail" style="height: 90px; width: 100%;" type="submit" name="vnp_BankCode" value="OJB">
+												<img src="/payment_vnpay/static/src/img/domesticbank/ojb_logo.png" />
+											</button>
+										</div>
+										<div class="col-md-3 col-xs-12 col-sm-6 col-6" style="padding: 10px">
+											<button class="thumbnail" style="height: 90px; width: 100%;" type="submit" name="vnp_BankCode" value="MSBANK">
+												<img src="/payment_vnpay/static/src/img/domesticbank/msbank_logo.png" />
+											</button>
+										</div>
+										<div class="col-md-3 col-xs-12 col-sm-6 col-6" style="padding: 10px">
+											<button class="thumbnail" style="height: 90px; width: 100%;" type="submit" name="vnp_BankCode" value="HDBANK">
+												<img src="/payment_vnpay/static/src/img/domesticbank/hdbank_logo.png" />
+											</button>
+										</div>
+										<div class="col-md-3 col-xs-12 col-sm-6 col-6" style="padding: 10px">
+											<button class="thumbnail" style="height: 90px; width: 100%;" type="submit" name="vnp_BankCode" value="NAMABANK">
+												<img src="/payment_vnpay/static/src/img/domesticbank/namabank_logo.png" />
+											</button>
+										</div>
+										<div class="col-md-3 col-xs-12 col-sm-6 col-6" style="padding: 10px">
+											<button class="thumbnail" style="height: 90px; width: 100%;" type="submit" name="vnp_BankCode" value="OCB">
+												<img src="/payment_vnpay/static/src/img/domesticbank/ocb_logo.png" />
+											</button>
+										</div>
+										<div class="col-md-3 col-xs-12 col-sm-6 col-6" style="padding: 10px">
+											<button class="thumbnail" style="height: 90px; width: 100%;" type="submit" name="vnp_BankCode" value="SCB">
+												<img src="/payment_vnpay/static/src/img/domesticbank/scb_logo.png" />
+											</button>
+										</div>
+										<div class="col-md-3 col-xs-12 col-sm-6 col-6" style="padding: 10px">
+											<button class="thumbnail" style="height: 90px; width: 100%; " type="submit" name="vnp_BankCode" value="IVB">
+												<img src="/payment_vnpay/static/src/img/domesticbank/ivb_logo.png" />
+											</button>
+										</div>
+
+									</div>
+
+								</div>
+							</form>
+
+						</div>
+
+					</div>
+				</div>
+			</t>
+
+		</template>
+
+	</data>
+</odoo>
